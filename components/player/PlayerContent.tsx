@@ -94,94 +94,139 @@ export const PlayerContent = ({
   }, [sound])
 
   return (
-    <div className={'flex h-full justify-evenly'}>
-      <div className={'flex items-center justify-start w-64'}>
-        <LibraryItem song={song} />
-        {isSignedIn && song && (
-          <LikeButton songId={song.id} />
-        )}
-      </div>
-
-      <div className={'flex h-full w-full items-center'}>
-        <div className={'flex flex-1 gap-x-2 items-center justify-center'}>
-          <SkipBack
-            size={25}
-            onClick={handlePlayPrevious}
-            className={'text-neutral-400 cursor-pointer hover:text-white transition'}
-          />
+    <>
+      {/* 手機模式 */}
+      <div className={'flex flex-col sm:hidden h-full justify-evenly'}>
+        <div className={'flex items-center'}>
+          <LibraryItem song={song} />
+          {isSignedIn && song && (
+            <LikeButton songId={song.id} />
+          )}
           <div
-            onClick={handlePlay}
-            className={'flex items-center justify-center rounded-full bg-white p-1 cursor-pointer'}
+            onClick={player.reset}
+            className={'relative w-5 h-5'}
           >
-            {isPlay
-              ? (
-                <Pause
-                  size={25}
-                  className={'text-black fill-black'}
-                />
-              )
-              : (
-                <Play
-                  size={25}
-                  className={'text-black fill-black'}
-                />
-              )
-            }
+            <X
+              size={20}
+              className={'absolute -top-5 -right-1 cursor-pointer'}
+            />
           </div>
-          <SkipForward
-            size={25}
-            onClick={handlePlayNext}
-            className={'text-neutral-400 cursor-pointer hover:text-white transition'}
-          />
+        </div>
+
+        <div className={'flex h-full w-full items-center'}>
+          <div className={'flex flex-1 gap-x-2 items-center justify-evenly'}>
+            <SkipBack
+              size={25}
+              onClick={handlePlayPrevious}
+              className={'text-neutral-400 cursor-pointer hover:text-white transition'}
+            />
+            <div
+              onClick={handlePlay}
+              className={'flex items-center justify-center rounded-full bg-white p-1 cursor-pointer'}
+            >
+              {isPlay
+                ? (
+                  <Pause
+                    size={25}
+                    className={'text-black fill-black'}
+                  />
+                )
+                : (
+                  <Play
+                    size={25}
+                    className={'text-black fill-black'}
+                  />
+                )
+              }
+            </div>
+            <SkipForward
+              size={25}
+              onClick={handlePlayNext}
+              className={'text-neutral-400 cursor-pointer hover:text-white transition'}
+            />
+          </div>
         </div>
       </div>
 
       {/* 桌機模式 */}
-      <div className={'hidden sm:flex gap-x-2 items-center justify-end mr-3'}>
-        <div
-          onClick={toggleMute}
-          className={'flex items-center]'}
-        >
-          {isMuted
-            ? (
-              <VolumeX
-                size={25}
-                className={'cursor-pointer'}
-              />
-            )
-            : (
-              <Volume2
-                size={25}
-                className={'cursor-pointer'}
-              />
-            )
-          }
+      <div className={'hidden sm:flex h-full justify-evenly'}>
+        <div className={'flex items-center justify-start w-64'}>
+          <LibraryItem song={song} />
+          {isSignedIn && song && (
+            <LikeButton songId={song.id} />
+          )}
         </div>
-        <Slider
-          value={[volume]}
-          onValueChange={([value]) => setVolume(value)}
-          className={'w-32 cursor-pointer'}
-        />
-        <div
-          onClick={player.reset}
-          className={'relative w-5 h-5'}
-        >
-          <X
-            size={20}
-            className={'absolute -top-5 -right-3 cursor-pointer'}
+
+        <div className={'flex h-full w-full items-center'}>
+          <div className={'flex flex-1 gap-x-2 items-center justify-center'}>
+            <SkipBack
+              size={25}
+              onClick={handlePlayPrevious}
+              className={'text-neutral-400 cursor-pointer hover:text-white transition'}
+            />
+            <div
+              onClick={handlePlay}
+              className={'flex items-center justify-center rounded-full bg-white p-1 cursor-pointer'}
+            >
+              {isPlay
+                ? (
+                  <Pause
+                    size={25}
+                    className={'text-black fill-black'}
+                  />
+                )
+                : (
+                  <Play
+                    size={25}
+                    className={'text-black fill-black'}
+                  />
+                )
+              }
+            </div>
+            <SkipForward
+              size={25}
+              onClick={handlePlayNext}
+              className={'text-neutral-400 cursor-pointer hover:text-white transition'}
+            />
+          </div>
+        </div>
+
+        <div className={'flex gap-x-2 items-center justify-end mr-3'}>
+          <div
+            onClick={toggleMute}
+            className={'flex items-center]'}
+          >
+            {isMuted
+              ? (
+                <VolumeX
+                  size={25}
+                  className={'cursor-pointer'}
+                />
+              )
+              : (
+                <Volume2
+                  size={25}
+                  className={'cursor-pointer'}
+                />
+              )
+            }
+          </div>
+          <Slider
+            value={[volume]}
+            onValueChange={([value]) => setVolume(value)}
+            className={'w-32 cursor-pointer'}
           />
+          <div
+            onClick={player.reset}
+            className={'relative w-5 h-5'}
+          >
+            <X
+              size={20}
+              className={'absolute -top-5 -right-3 cursor-pointer'}
+            />
+          </div>
         </div>
       </div>
-      {/* 手機模式 */}
-      <div
-        onClick={player.reset}
-        className={'flex sm:hidden relative w-5 h-5'}
-      >
-        <X
-          size={20}
-          className={'absolute -top-1 -right-1 cursor-pointer'}
-        />
-      </div>
-    </div>
+    </>
   )
 }
