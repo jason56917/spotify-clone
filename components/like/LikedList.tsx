@@ -46,7 +46,7 @@ export const LikedList = () => {
           <div className={'flex-1'}>
             <LibraryItem
               song={song.song}
-              songs={likedSongsQuery.data.map((song) => song.song)}
+              songIds={likedSongsQuery.data.map((song) => song.songId)}
             />
           </div>
           <LikeButton songId={song.song.id} />

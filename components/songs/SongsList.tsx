@@ -33,10 +33,8 @@ export const SongsList = () => {
       {songsQuery.data?.map((song) => (
         <SongItem
           key={song.id}
-          // 目前應該只需要傳遞song.songUrl
           song={song}
-          // 目前應該只需要傳遞陣列songs.songUrl
-          songs={songsQuery.data}
+          songIds={songsQuery.data.map((song) => song.id)}
         />
       ))}
     </div>

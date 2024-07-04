@@ -53,7 +53,7 @@ export const Library = () => {
           )
           : (
             <>
-              {songsByUserIdQuery.data?.length === 0 && (
+              {isSignedIn && songsByUserIdQuery.data?.length === 0 && (
                 <div className={'mt-4 text-neutral-400'}>
                   Music not uploaded yet
                 </div>
@@ -62,7 +62,7 @@ export const Library = () => {
                 <LibraryItem
                   key={song.id}
                   song={song}
-                  songs={songsByUserIdQuery.data}
+                  songIds={songsByUserIdQuery.data.map((song) => song.id)}
                 />
               ))}
             </>

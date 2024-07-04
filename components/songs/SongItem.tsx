@@ -8,18 +8,18 @@ import { Skeleton } from '../ui/skeleton'
 
 interface Props {
   song: SongType
-  songs: SongType[]
+  songIds: string[]
 }
 
 export const SongItem = ({
   song,
-  songs,
+  songIds,
 }: Props) => {
   const player = usePlayer()
 
   const handleClick = (songId: string) => {
     player.setId(songId)
-    player.setIds(songs.map((song) => song.id))
+    player.setIds(songIds)
   }
 
   return (

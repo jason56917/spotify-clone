@@ -40,7 +40,7 @@ const app = new Hono()
     async (c) => {
       const auth = getAuth(c)
       if (!auth?.userId) {
-        return c.json({ error: 'Unauthorized' }, 401)
+        return c.json({ data: [] })
       }
 
       const data = await db
@@ -74,12 +74,12 @@ const app = new Hono()
           .optional(),
       })
     ),
-    clerkMiddleware(),
+    // clerkMiddleware(),
     async (c) => {
-      const auth = getAuth(c)
-      if (!auth?.userId) {
-        return c.json({ error: 'Unauthorized' }, 401)
-      }
+      // const auth = getAuth(c)
+      // if (!auth?.userId) {
+      //   return c.json({ error: 'Unauthorized' }, 401)
+      // }
 
       const { id } = c.req.valid('param')
       if (!id) {

@@ -4,7 +4,6 @@ import { Play } from 'lucide-react'
 import { Button } from '../ui/button'
 
 // 只是做一個icon而已沒有實際用處
-// 但應該統一使用此icon
 export const PlayButton = () => {
   return (
     <Button

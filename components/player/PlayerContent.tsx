@@ -8,6 +8,7 @@ import { useEffect, useState } from 'react'
 import { usePlayer } from '@/hooks/play/usePlayer'
 import useSound from 'use-sound'
 import { Slider } from '../ui/slider'
+import { useAuth } from '@clerk/nextjs'
 
 interface Props {
   song: SongType
@@ -16,6 +17,7 @@ interface Props {
 export const PlayerContent = ({
   song,
 }: Props) => {
+  const { isSignedIn } = useAuth()
   const player = usePlayer()
 
   const [volume, setVolume] = useState(100)
@@ -92,168 +94,94 @@ export const PlayerContent = ({
   }, [sound])
 
   return (
-    <>
-      <div className={'flex sm:hidden h-full justify-around'}>
-        <div className={'flex items-center justify-start'}>
-          <div className={'w-40'}>
-            <LibraryItem song={song} />
-          </div>
-          {song && (
-            <LikeButton songId={song.id} />
-          )}
-        </div>
+    <div className={'flex h-full justify-evenly'}>
+      <div className={'flex items-center justify-start w-64'}>
+        <LibraryItem song={song} />
+        {isSignedIn && song && (
+          <LikeButton songId={song.id} />
+        )}
+      </div>
 
-        <div className={'flex flex-col h-full w-full items-center justify-center mr-4'}>
-          <div className={'flex gap-x-2 items-center justify-center mx-auto'}>
-            <SkipBack
-              size={20}
-              onClick={handlePlayPrevious}
-              className={'text-neutral-400 cursor-pointer hover:text-white transition'}
-            />
-            <div
-              onClick={handlePlay}
-              className={'flex items-center justify-center rounded-full bg-white p-1 cursor-pointer'}
-            >
-              {isPlay
-                ? (
-                  <Pause
-                    size={20}
-                    className={'text-black fill-black'}
-                  />
-                )
-                : (
-                  <Play
-                    size={20}
-                    className={'text-black fill-black'}
-                  />
-                )
-              }
-            </div>
-            <SkipForward
-              size={20}
-              onClick={handlePlayNext}
-              className={'text-neutral-400 cursor-pointer hover:text-white transition'}
-            />
+      <div className={'flex h-full w-full items-center'}>
+        <div className={'flex flex-1 gap-x-2 items-center justify-center'}>
+          <SkipBack
+            size={25}
+            onClick={handlePlayPrevious}
+            className={'text-neutral-400 cursor-pointer hover:text-white transition'}
+          />
+          <div
+            onClick={handlePlay}
+            className={'flex items-center justify-center rounded-full bg-white p-1 cursor-pointer'}
+          >
+            {isPlay
+              ? (
+                <Pause
+                  size={25}
+                  className={'text-black fill-black'}
+                />
+              )
+              : (
+                <Play
+                  size={25}
+                  className={'text-black fill-black'}
+                />
+              )
+            }
           </div>
-
-          <div className={'flex gap-x-2 items-center justify-center'}>
-            <div
-              onClick={toggleMute}
-              className={'flex items-center pt-2'}
-            >
-              {isMuted
-                ? (
-                  <VolumeX
-                    size={15}
-                    className={'cursor-pointer'}
-                  />
-                )
-                : (
-                  <Volume2
-                    size={15}
-                    className={'cursor-pointer'}
-                  />
-                )
-              }
-            </div>
-            <Slider
-              value={[volume]}
-              onValueChange={([value]) => setVolume(value)}
-              className={'w-16 pt-2 cursor-pointer'}
-            />
-          </div>
+          <SkipForward
+            size={25}
+            onClick={handlePlayNext}
+            className={'text-neutral-400 cursor-pointer hover:text-white transition'}
+          />
         </div>
+      </div>
+
+      {/* 桌機模式 */}
+      <div className={'hidden sm:flex gap-x-2 items-center justify-end mr-3'}>
+        <div
+          onClick={toggleMute}
+          className={'flex items-center]'}
+        >
+          {isMuted
+            ? (
+              <VolumeX
+                size={25}
+                className={'cursor-pointer'}
+              />
+            )
+            : (
+              <Volume2
+                size={25}
+                className={'cursor-pointer'}
+              />
+            )
+          }
+        </div>
+        <Slider
+          value={[volume]}
+          onValueChange={([value]) => setVolume(value)}
+          className={'w-32 cursor-pointer'}
+        />
         <div
           onClick={player.reset}
           className={'relative w-5 h-5'}
         >
           <X
             size={20}
-            className={'absolute top-0 right-0 cursor-pointer'}
+            className={'absolute -top-5 -right-3 cursor-pointer'}
           />
         </div>
       </div>
-
-      <div className={'hidden sm:flex h-full justify-evenly'}>
-        <div className={'flex items-center justify-start w-64'}>
-
-          <LibraryItem song={song} />
-
-          {song && (
-            <LikeButton songId={song.id} />
-          )}
-        </div>
-
-        <div className={'flex h-full w-full items-center'}>
-          <div className={'flex flex-1 gap-x-2 items-center justify-center'}>
-            <SkipBack
-              size={25}
-              onClick={handlePlayPrevious}
-              className={'text-neutral-400 cursor-pointer hover:text-white transition'}
-            />
-            <div
-              onClick={handlePlay}
-              className={'flex items-center justify-center rounded-full bg-white p-1 cursor-pointer'}
-            >
-              {isPlay
-                ? (
-                  <Pause
-                    size={25}
-                    className={'text-black fill-black'}
-                  />
-                )
-                : (
-                  <Play
-                    size={25}
-                    className={'text-black fill-black'}
-                  />
-                )
-              }
-            </div>
-            <SkipForward
-              size={25}
-              onClick={handlePlayNext}
-              className={'text-neutral-400 cursor-pointer hover:text-white transition'}
-            />
-          </div>
-        </div>
-
-        <div className={'flex gap-x-2 items-center justify-end mr-3'}>
-          <div
-            onClick={toggleMute}
-            className={'flex items-center]'}
-          >
-            {isMuted
-              ? (
-                <VolumeX
-                  size={25}
-                  className={'cursor-pointer'}
-                />
-              )
-              : (
-                <Volume2
-                  size={25}
-                  className={'cursor-pointer'}
-                />
-              )
-            }
-          </div>
-          <Slider
-            value={[volume]}
-            onValueChange={([value]) => setVolume(value)}
-            className={'w-32 cursor-pointer'}
-          />
-          <div
-            onClick={player.reset}
-            className={'relative w-5 h-5'}
-          >
-            <X
-              size={20}
-              className={'absolute -top-5 -right-3 cursor-pointer'}
-            />
-          </div>
-        </div>
+      {/* 手機模式 */}
+      <div
+        onClick={player.reset}
+        className={'flex sm:hidden relative w-5 h-5'}
+      >
+        <X
+          size={20}
+          className={'absolute -top-1 -right-1 cursor-pointer'}
+        />
       </div>
-    </>
+    </div>
   )
 }

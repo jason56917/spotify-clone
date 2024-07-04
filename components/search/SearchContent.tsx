@@ -4,9 +4,10 @@ import { useGetSongs } from '@/hooks/api/songs/useGetSongs'
 import { LibraryItem, LibraryItemSkeleton } from '../sidebar/LibraryItem'
 import { LikeButton, LikeButtonSkeleton } from '../like/LikeButton'
 import { useSearchParams } from 'next/navigation'
-import { Skeleton } from '../ui/skeleton'
+import { useAuth } from '@clerk/nextjs'
 
 export const SearchContent = () => {
+  const { isSignedIn } = useAuth()
   const songsQuery = useGetSongs()
   const isLoading = songsQuery.isLoading
   // 使用param取得查詢參數
@@ -56,10 +57,10 @@ export const SearchContent = () => {
           <div className={'flex-1'}>
             <LibraryItem
               song={song}
-              songs={songsQuery.data}
+              songIds={searchResult.map((song) => song.id)}
             />
           </div>
-          <LikeButton songId={song.id} />
+          {isSignedIn && <LikeButton songId={song.id} />}
         </div>
       ))}
     </div>

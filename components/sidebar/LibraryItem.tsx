@@ -8,19 +8,19 @@ import { Skeleton } from '../ui/skeleton'
 
 interface Props {
   song: SongType
-  songs?: SongType[]
+  songIds?: string[]
 }
 
 export const LibraryItem = ({
   song,
-  songs,
+  songIds,
 }: Props) => {
   const player = usePlayer()
 
   const handleClick = (songId: string) => {
-    if (songs) {
+    if (songIds) {
       player.setId(songId)
-      player.setIds(songs.map((song) => song.id))
+      player.setIds(songIds)
     }
   }
 
@@ -29,7 +29,7 @@ export const LibraryItem = ({
       onClick={() => handleClick(song.id)}
       className={cn(
         'flex items-center gap-x-3 cursor-pointer w-full p-2 rounded-md',
-        songs && 'hover:bg-neutral-500/50'
+        songIds && 'hover:bg-neutral-500/50'
       )}
     >
       <div className={'relative rounded-md min-h-[48px] min-w-[48px] overflow-hidden'}>
