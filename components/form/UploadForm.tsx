@@ -1,7 +1,7 @@
 'use client'
 
 import { useForm } from 'react-hook-form'
-import { Form, FormControl, FormField, FormItem, FormLabel } from '../ui/form'
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
 import { Input } from '../ui/input'
 import { insertSongSchema } from '@/db/schema'
 import { z } from 'zod'
@@ -90,6 +90,7 @@ export const UploadForm = (
                   className={'bg-neutral-700 placeholder:text-neutral-400 focus-visible:ring-0 focus-visible:ring-offset-0'}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -109,6 +110,7 @@ export const UploadForm = (
                   className={'bg-neutral-700 placeholder:text-neutral-400 focus-visible:ring-0 focus-visible:ring-offset-0'}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -119,13 +121,13 @@ export const UploadForm = (
           label={'Select a song file'}
           type={'file'}
           setUrl={setSongUrl}
-          url={songUrl}
+          error={form.formState.errors.songUrl?.message}
         />
         <UploadFile
           label={'Select a song image'}
           type={'image'}
           setUrl={setImageUrl}
-          url={imageUrl}
+          error={form.formState.errors.imageUrl?.message}
         />
 
         {/* 隱藏的input，提交songUrl與imageUrl */}
@@ -142,6 +144,7 @@ export const UploadForm = (
                   {...field}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />
@@ -158,6 +161,7 @@ export const UploadForm = (
                   {...field}
                 />
               </FormControl>
+              <FormMessage />
             </FormItem>
           )}
         />

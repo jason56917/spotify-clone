@@ -3,8 +3,7 @@
 import { useUploadDialog } from '@/hooks/dialog/useUploadDialog'
 
 import { UploadForm } from '../form/UploadForm'
-import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '../ui/dialog'
-import { Button } from '../ui/button'
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '../ui/dialog'
 import { useCreateSong } from '@/hooks/api/songs/useCreateSong'
 import { insertSongSchema } from '@/db/schema'
 import { z } from 'zod'
@@ -94,14 +93,6 @@ export const UploadDialog = () => {
           setImageUrl={setImageUrl}
           imageUrl={imageUrl}
         />
-        {/* <DialogFooter>
-          <Button
-            disabled={false}
-            onSubmit={handleSubmit}
-          >
-            Submit
-          </Button>
-        </DialogFooter> */}
       </DialogContent>
     </Dialog>
   )

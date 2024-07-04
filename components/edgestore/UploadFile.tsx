@@ -6,19 +6,20 @@ import { Input } from '../ui/input'
 import { Button } from '../ui/button'
 import { Label } from '../ui/label'
 import { CheckCheck } from 'lucide-react'
+import { cn } from '@/lib/utils'
 
 interface Props {
   label: string
   type: 'file' | 'image'
   setUrl: (url: string) => void
-  url: string
+  error?: string
 }
 
 export const UploadFile = ({
   label,
   type,
   setUrl,
-  url,
+  error,
 }: Props) => {
   const [file, setFile] = useState<File>()
   const [progress, setProgress] = useState<number>()
@@ -26,7 +27,11 @@ export const UploadFile = ({
 
   return (
     <div className={'space-y-2'}>
-      <Label>
+      <Label
+        className={cn(
+          error && 'text-red-900'
+        )}
+      >
         {label}
       </Label>
       <div className={'flex gap-x-2 justify-between'}>
@@ -34,24 +39,38 @@ export const UploadFile = ({
           ? (
             <>
               {type === 'file' && (
-                <Input
-                  type={'file'}
-                  accept={'.mp3'}
-                  onChange={(e) => {
-                    setFile(e.target.files?.[0])
-                  }}
-                  className={'bg-neutral-700 placeholder:text-neutral-400 file:text-neutral-400 focus-visible:ring-0 focus-visible:ring-offset-0'}
-                />
+                <div className={'flex flex-col'}>
+                  <Input
+                    type={'file'}
+                    accept={'.mp3'}
+                    onChange={(e) => {
+                      setFile(e.target.files?.[0])
+                    }}
+                    className={'bg-neutral-700 placeholder:text-neutral-400 file:text-neutral-400 focus-visible:ring-0 focus-visible:ring-offset-0'}
+                  />
+                  {error && (
+                    <p className={'text-sm text-red-900 mt-1'}>
+                      {error}
+                    </p>
+                  )}
+                </div>
               )}
               {type === 'image' && (
-                <Input
-                  type={'file'}
-                  accept={'image/*'}
-                  onChange={(e) => {
-                    setFile(e.target.files?.[0])
-                  }}
-                  className={'bg-neutral-700 placeholder:text-neutral-400 file:text-neutral-400 focus-visible:ring-0 focus-visible:ring-offset-0'}
-                />
+                <div className={'flex flex-col'}>
+                  <Input
+                    type={'file'}
+                    accept={'image/*'}
+                    onChange={(e) => {
+                      setFile(e.target.files?.[0])
+                    }}
+                    className={'bg-neutral-700 placeholder:text-neutral-400 file:text-neutral-400 focus-visible:ring-0 focus-visible:ring-offset-0'}
+                  />
+                  {error && (
+                    <p className={'text-sm text-red-900 mt-1'}>
+                      {error}
+                    </p>
+                  )}
+                </div>
               )}
             </>
           )

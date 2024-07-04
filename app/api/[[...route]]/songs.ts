@@ -26,6 +26,7 @@ const app = new Hono()
         .orderBy(
           desc(songs.createdAt)
         )
+      // 根據取得的資料是單獨或者陣列來回傳null或[]
       if (!data) {
         return c.json({ data: [] })
       }
@@ -39,6 +40,8 @@ const app = new Hono()
     clerkMiddleware(),
     async (c) => {
       const auth = getAuth(c)
+      // 根據實際需求回傳
+      // c.json({ error: 'Unauthorized' }, 401)
       if (!auth?.userId) {
         return c.json({ data: [] })
       }
@@ -115,12 +118,13 @@ const app = new Hono()
     clerkMiddleware(),
     zValidator(
       'json',
-      insertSongSchema.pick({
-        title: true,
-        album: true,
-        songUrl: true,
-        imageUrl: true,
-      })
+      insertSongSchema
+        .pick({
+          title: true,
+          album: true,
+          songUrl: true,
+          imageUrl: true,
+        })
     ),
     async (c) => {
       const auth = getAuth(c)
@@ -129,6 +133,9 @@ const app = new Hono()
       }
 
       const values = c.req.valid('json')
+      if (!values) {
+        return c.json({ error: 'Invalid data' }, 400)
+      }
 
       const [data] = await db.insert(songs)
         .values({
