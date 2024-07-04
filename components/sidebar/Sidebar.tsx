@@ -40,7 +40,7 @@ export const Sidebar = ({
     <div
       className={cn(
         'flex h-full',
-        player.activeId && 'h-[calc(100%-80px)]'
+        player.activeId && 'h-[calc(100%-120px)] sm:h-[calc(100%-80px)]'
       )}
     >
       <div className={'hidden md:flex flex-col gap-2 h-full w-[300px] p-2'}>
