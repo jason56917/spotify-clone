@@ -1,36 +1,24 @@
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-## Getting Started
+Maison-Camp | 露營家
+Tibame CEA101G3 專題
 
-First, run the development server:
+專題說明：
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+本網站採取會員制，註冊會員後才能使用各項系統，以保障各位使用者的權益；
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+結合飯店與露營元素，本網站不只有飯店式的訂房系統，還擁有商城系統可供使用者線上下單，再加上活動預約系統讓每個參與者都能事先體驗網站的便利之處。
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+開發使用到的技術：
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+後端：JavaEE, Servlet, JSP, DAO(DataSource) 含 MVC 架構
 
-## Learn More
+前端：javaScript, jQuery, Ajax, HTML5, CSS3, Bootstrap
 
-To learn more about Next.js, take a look at the following resources:
+後端框架：Hibernate
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+伺服端：Tomcat 9.038
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+資料庫：Oracle, Redis
 
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+整合：git
