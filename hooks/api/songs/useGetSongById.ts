@@ -9,7 +9,6 @@ export const useGetSongById = (id?: string) => {
       const response = await client.api['songs'][':id']['$get']({
         param: { id },
       })
-      // 這不是axios，不能用try catch來接住錯誤
       if (!response.ok) {
         throw new Error('Failed to fetch song')
       }

@@ -2,6 +2,7 @@
 
 import { useGetSongById } from '@/hooks/api/songs/useGetSongById'
 import { usePlayer } from '@/hooks/play/usePlayer'
+
 import { PlayerContent } from './PlayerContent'
 
 export const PlayerBar = () => {

@@ -1,11 +1,11 @@
+import { z } from 'zod'
+import { db } from '@/db/drizzle'
+import { insertSongSchema, songs } from '@/db/schema'
+import { desc, eq } from 'drizzle-orm'
 import { Hono } from 'hono'
 import { zValidator } from '@hono/zod-validator'
-import { insertSongSchema, likedSongs, songs } from '@/db/schema'
 import { clerkMiddleware, getAuth } from '@hono/clerk-auth'
-import { db } from '@/db/drizzle'
 import { createId } from '@paralleldrive/cuid2'
-import { and, desc, eq } from 'drizzle-orm'
-import { z } from 'zod'
 
 const app = new Hono()
   // /: 取得全部的音樂

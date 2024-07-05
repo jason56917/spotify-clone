@@ -8,11 +8,11 @@ import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Button } from '../ui/button'
 import { UploadFile } from '../edgestore/UploadFile'
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 
-// 應該在表單內選擇檔案後點擊上傳到Edgestore後，得到連結
-// 應該在表單內選擇照片後點擊上傳到Edgestore後，得到連結
-// 兩個連結都得到後才提交
+// 在表單內選擇檔案後點擊上傳到Edgestore後，得到連結
+// 在表單內選擇照片後點擊上傳到Edgestore後，得到連結
+// 兩個連結都得到後才能提交
 
 // 1. 提供schema規範給zod
 const formSchema = insertSongSchema.pick({
@@ -26,7 +26,6 @@ const formSchema = insertSongSchema.pick({
 type FormValues = z.input<typeof formSchema>
 
 interface Props {
-  id?: string
   disabled?: boolean
   defaultValues?: FormValues
   onSubmit: (values: FormValues) => void
@@ -36,10 +35,8 @@ interface Props {
   imageUrl: string
 }
 
-// 可以上傳新的音樂，也可以編輯音樂
 export const UploadForm = (
   {
-    id,
     disabled,
     defaultValues,
     onSubmit,

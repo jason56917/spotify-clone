@@ -1,10 +1,11 @@
 'use client'
 
-import { cn } from '@/lib/utils'
-import { useRouter } from 'next/navigation'
-import { Button } from '../ui/button'
 import { ChevronLeft, ChevronRight, Home, Search } from 'lucide-react'
 import { ClerkLoaded, UserButton, useAuth } from '@clerk/nextjs'
+import { useRouter } from 'next/navigation'
+import { cn } from '@/lib/utils'
+
+import { Button } from '../ui/button'
 
 interface Props {
   className?: string

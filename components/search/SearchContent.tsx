@@ -1,10 +1,11 @@
 'use client'
 
+import { useAuth } from '@clerk/nextjs'
+import { useSearchParams } from 'next/navigation'
 import { useGetSongs } from '@/hooks/api/songs/useGetSongs'
+
 import { LibraryItem, LibraryItemSkeleton } from '../sidebar/LibraryItem'
 import { LikeButton, LikeButtonSkeleton } from '../like/LikeButton'
-import { useSearchParams } from 'next/navigation'
-import { useAuth } from '@clerk/nextjs'
 
 export const SearchContent = () => {
   const { isSignedIn } = useAuth()

@@ -1,14 +1,15 @@
 'use client'
 
-import { SongType } from '@/db/schema'
-import { LikeButton } from '../like/LikeButton'
-import { LibraryItem } from '../sidebar/LibraryItem'
 import { Pause, Play, SkipBack, SkipForward, Volume2, VolumeX, X } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { usePlayer } from '@/hooks/play/usePlayer'
-import useSound from 'use-sound'
-import { Slider } from '../ui/slider'
 import { useAuth } from '@clerk/nextjs'
+import { SongType } from '@/db/schema'
+import useSound from 'use-sound'
+import { usePlayer } from '@/hooks/play/usePlayer'
+
+import { LibraryItem } from '../sidebar/LibraryItem'
+import { LikeButton } from '../like/LikeButton'
+import { Slider } from '../ui/slider'
 
 interface Props {
   song: SongType

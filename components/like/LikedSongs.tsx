@@ -1,9 +1,10 @@
 'use client'
 
-import { useRouter } from 'next/navigation'
-import { Button } from '../ui/button'
-import Image from 'next/image'
 import { Play } from 'lucide-react'
+import { useRouter } from 'next/navigation'
+import Image from 'next/image'
+
+import { Button } from '../ui/button'
 
 interface Props {
   image: string

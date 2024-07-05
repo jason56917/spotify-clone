@@ -3,11 +3,12 @@
 import { Home, Search } from 'lucide-react'
 import { usePathname } from 'next/navigation'
 import { useMemo } from 'react'
-import { Card } from '../ui/card'
-import { SidebarItem } from './SidebarItem'
-import { Library } from './Library'
 import { usePlayer } from '@/hooks/play/usePlayer'
 import { cn } from '@/lib/utils'
+
+import { SidebarItem } from './SidebarItem'
+import { Library } from './Library'
+import { Card } from '../ui/card'
 
 interface Props {
   children: React.ReactNode

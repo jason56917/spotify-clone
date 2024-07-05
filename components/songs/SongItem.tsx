@@ -1,9 +1,9 @@
 'use client'
 
-import { SongType } from '@/db/schema'
 import Image from 'next/image'
-import { PlayButton } from './PlayButton'
+import { SongType } from '@/db/schema'
 import { usePlayer } from '@/hooks/play/usePlayer'
+import { PlayButton } from './PlayButton'
 import { Skeleton } from '../ui/skeleton'
 
 interface Props {

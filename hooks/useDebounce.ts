@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react'
 
-// 列舉型別: T，T指的是變數
+// 列舉型別: T，T指的是變數型別
 // 定義參數型別
-// return 型別
+// return 變數型別
 export const useDebounce = <T>(
   value: T,
   // 預設為300

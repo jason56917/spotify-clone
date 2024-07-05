@@ -1,9 +1,10 @@
 'use client'
 
+import Image from 'next/image'
 import { SongType } from '@/db/schema'
 import { usePlayer } from '@/hooks/play/usePlayer'
 import { cn } from '@/lib/utils'
-import Image from 'next/image'
+
 import { Skeleton } from '../ui/skeleton'
 
 interface Props {

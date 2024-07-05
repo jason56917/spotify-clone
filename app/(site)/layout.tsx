@@ -1,15 +1,16 @@
-import React from 'react'
+import './globals.css'
 import type { Metadata } from 'next'
 import { Figtree } from 'next/font/google'
-import './globals.css'
-import { ThemeProvider } from '@/providers/ThemeProvider'
-import { Sidebar } from '@/components/sidebar/Sidebar'
-import { QueryProvider } from '@/providers/QueryProvider'
+import React from 'react'
 import { ClerkProvider } from '@clerk/nextjs'
-import { DialogProvider } from '@/providers/DialogProvider'
 import { EdgeStoreProvider } from '@/lib/edgestore'
-import { Toaster } from '@/components/ui/sonner'
+
+import { DialogProvider } from '@/providers/DialogProvider'
+import { ThemeProvider } from '@/providers/ThemeProvider'
+import { QueryProvider } from '@/providers/QueryProvider'
+import { Sidebar } from '@/components/sidebar/Sidebar'
 import { PlayerBar } from '@/components/player/PlayerBar'
+import { Toaster } from '@/components/ui/sonner'
 
 const font = Figtree({ subsets: ['latin'] })
 

@@ -1,6 +1,7 @@
+import Image from 'next/image'
+
 import { Header } from '@/components/header/Header'
 import { LikedList } from '@/components/like/LikedList'
-import Image from 'next/image'
 
 export default async function LikedPage() {
   return (

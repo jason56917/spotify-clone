@@ -1,6 +1,6 @@
 import { Header } from '@/components/header/Header'
-import { SearchContent } from '@/components/search/SearchContent'
 import { SearchInput } from '@/components/search/SearchInput'
+import { SearchContent } from '@/components/search/SearchContent'
 
 export default async function SearchPage() {
   return (
