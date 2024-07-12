@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 
 import { Button } from '../ui/button'
+import { PlayButton } from '../songs/PlayButton'
 
 interface Props {
   image: string
@@ -40,8 +41,8 @@ export const LikedSongs = ({
       <p className={'font-medium truncate text-base text-white'}>
         {name}
       </p>
-      <p className={'absolute transition opacity-0 rounded-full flex items-center justify-center bg-green-500 p-2 drop-shadow-md right-1 group-hover:opacity-100 hover:scale-110'}>
-        <Play className={'text-black size-4'} />
+      <p className={'absolute transition opacity-0 rounded-full flex items-center justify-center bg-green-500 drop-shadow-md right-1 group-hover:opacity-100 hover:scale-110'}>
+        <PlayButton />
       </p>
     </Button>
   )
