@@ -12,7 +12,7 @@
 - **語言**:  TypeScript
 - **前後端**:  Next.js
 - **CSS Style**: Tailwind CSS、shadcn/ui
-- **API**:  Hono 
+- **API**:  Hono、TanStack Query
 - **資料庫**: PostgreSQL 
 - **ORM**: Drizzle ORM
 - **欄位驗證**: Zod
