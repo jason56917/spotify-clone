@@ -1,74 +1,17 @@
 'use client'
 
-import { toast } from 'sonner'
-import { useState } from 'react'
-import { z } from 'zod'
-import { insertSongSchema } from '@/db/schema'
 import { useUploadDialog } from '@/hooks/dialog/useUploadDialog'
-import { useCreateSong } from '@/hooks/api/songs/useCreateSong'
-import { useEdgeStore } from '@/lib/edgestore'
 
-import { UploadForm } from '../form/UploadForm'
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from '../ui/dialog'
-
-const formSchema = insertSongSchema.pick({
-  title: true,
-  album: true,
-  songUrl: true,
-  imageUrl: true,
-})
-type FormValues = z.input<typeof formSchema>
+import { UploadForm } from '../form/UploadForm'
 
 export const UploadDialog = () => {
   const uploadDialog = useUploadDialog()
-  const songMutation = useCreateSong()
-  const { edgestore } = useEdgeStore()
-
-  // 在此設置useState來記錄上傳到edgestore後的url
-  // 藉由將該狀態props到UploadFile來取得url
-  const [songUrl, setSongUrl] = useState('')
-  const [imageUrl, setImageUrl] = useState('')
-
-  const handleSubmit = (values: FormValues) => {
-    songMutation.mutate(
-      values,
-      {
-        onSuccess: () => {
-          uploadDialog.onClose()
-          toast.success('音樂已建立')
-        },
-        onError: () => {
-          toast.error('音樂建立失敗!')
-        },
-      }
-    )
-  }
-
-  const handleCleanFile = async () => {
-    try {
-      if (songUrl) {
-        await edgestore.publicFiles.delete({ url: songUrl })
-      }
-      if (imageUrl) {
-        await edgestore.publicFiles.delete({ url: imageUrl })
-      }
-      if (songUrl || imageUrl) {
-        toast.success('上傳檔案已刪除!')
-      }
-    } catch (error) {
-      console.log(error)
-    }
-  }
-
-  const handleChange = async () => {
-    await handleCleanFile()
-    uploadDialog.onClose()
-  }
 
   return (
     <Dialog
       open={uploadDialog.isOpen}
-      onOpenChange={handleChange}
+      onOpenChange={uploadDialog.onClose}
     >
       <DialogContent className={'bg-neutral-900'}>
         <DialogHeader>
@@ -80,18 +23,7 @@ export const UploadDialog = () => {
           </DialogDescription>
         </DialogHeader>
         <UploadForm
-          disabled={songMutation.isPaused}
-          defaultValues={{
-            title: '',
-            album: '',
-            songUrl: '',
-            imageUrl: '',
-          }}
-          onSubmit={handleSubmit}
-          setSongUrl={setSongUrl}
-          songUrl={songUrl}
-          setImageUrl={setImageUrl}
-          imageUrl={imageUrl}
+          onClose={uploadDialog.onClose}
         />
       </DialogContent>
     </Dialog>

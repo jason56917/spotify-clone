@@ -1,20 +1,25 @@
 'use client'
 
-import { useForm } from 'react-hook-form'
-import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
-import { Input } from '../ui/input'
-import { insertSongSchema } from '@/db/schema'
+import { CheckCheck } from 'lucide-react'
+import { toast } from 'sonner'
+import { UploadFile } from '../edgestore/UploadFile'
 import { z } from 'zod'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { useEffect, useState, useTransition } from 'react'
+import { useCreateSong } from '@/hooks/api/songs/useCreateSong'
+import { useEdgeStore } from '@/lib/edgestore'
+import { insertSongSchema } from '@/db/schema'
+
+import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '../ui/form'
 import { Button } from '../ui/button'
-import { UploadFile } from '../edgestore/UploadFile'
-import { useEffect } from 'react'
+import { Input } from '../ui/input'
 
 // 在表單內選擇檔案後點擊上傳到Edgestore後，得到連結
 // 在表單內選擇照片後點擊上傳到Edgestore後，得到連結
 // 兩個連結都得到後才能提交
 
-// 1. 提供schema規範給zod
+// 1. 提供schema給zod
 const formSchema = insertSongSchema.pick({
   title: true,
   album: true,
@@ -25,45 +30,102 @@ const formSchema = insertSongSchema.pick({
 // 2. 表單屬性的型別
 type FormValues = z.input<typeof formSchema>
 
+
 interface Props {
-  disabled?: boolean
-  defaultValues?: FormValues
-  onSubmit: (values: FormValues) => void
-  setSongUrl: (url: string) => void
-  songUrl: string
-  setImageUrl: (url: string) => void
-  imageUrl: string
+  onClose: () => void
 }
 
-export const UploadForm = (
-  {
-    disabled,
-    defaultValues,
-    onSubmit,
-    setSongUrl,
-    songUrl,
-    setImageUrl,
-    imageUrl,
-  }: Props) => {
+export const UploadForm = ({
+  onClose,
+}: Props) => {
+  const songMutation = useCreateSong()
+  const { edgestore } = useEdgeStore()
+
+  const [isPending, startTransition] = useTransition()
+
+  // 儲存檔案給edgestore上傳
+  const [song, setSong] = useState<File>()
+  // 紀錄上傳進度
+  const [songProgress, setSongProgress] = useState<number>()
+  // 儲存選擇的圖片產生的暫時連結或既有的圖片連結
+  const [songPreviewUrl, setSongPreviewUrl] = useState<string>()
+
+  // 儲存檔案給edgestore上傳
+  const [image, setImage] = useState<File>()
+  // 紀錄上傳進度
+  const [imageProgress, setImageProgress] = useState<number>()
+  // 儲存選擇的圖片產生的暫時連結或既有的圖片連結
+  const [imagePreviewUrl, setImagePreviewUrl] = useState<string>()
+
   const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
-    defaultValues: defaultValues,
+    defaultValues: {
+      title: '',
+      album: '',
+      songUrl: '',
+      imageUrl: '',
+    },
   })
 
-  const handleSubmit = (values: FormValues) => {
-    onSubmit(values)
+  const handleUpload = async () => {
+    if (song) {
+      const uploadedSong = await edgestore.publicFiles.upload({
+        file: song,
+        onProgressChange: (process) => {
+          setSongProgress(process)
+        },
+      })
+      form.setValue('songUrl', uploadedSong.url)
+    }
+    if (image) {
+      const uploadedImage = await edgestore.publicFiles.upload({
+        file: image,
+        onProgressChange: (process) => {
+          setImageProgress(process)
+        },
+      })
+      form.setValue('imageUrl', uploadedImage.url)
+    }
   }
+
+  const handleSubmit = (values: FormValues) => {
+    startTransition(async () => {
+      await handleUpload()
+
+      const updatedValues = {
+        ...values,
+        songUrl: form.getValues('songUrl'),
+        imageUrl: form.getValues('imageUrl'),
+      }
+
+      songMutation.mutate(
+        updatedValues,
+        {
+          onSuccess: () => {
+            onClose()
+            toast.success('音樂已建立')
+          },
+          onError: () => {
+            toast.error('音樂建立失敗!')
+          },
+        }
+      )
+    })
+  }
+
+  // const isPending = songMutation.isPending
 
   // 使用useEffect監聽當有變動時執行form.setValue
   // 表單的songUrl與imagePtah的input隱藏起來不需顯示
   useEffect(() => {
-    if (songUrl) {
-      form.setValue('songUrl', songUrl)
+    if (songPreviewUrl !== undefined) {
+      form.setValue('songUrl', songPreviewUrl)
     }
-    if (imageUrl) {
-      form.setValue('imageUrl', imageUrl)
+    if (imagePreviewUrl !== undefined) {
+      console.log('hi')
+      form.setValue('imageUrl', imagePreviewUrl)
     }
-  }, [songUrl, imageUrl, form])
+  }, [songPreviewUrl, imagePreviewUrl, form])
 
   return (
     <Form {...form}>
@@ -82,7 +144,7 @@ export const UploadForm = (
               <FormControl>
                 <Input
                   {...field}
-                  disabled={disabled}
+                  disabled={isPending}
                   placeholder={'樂曲名稱'}
                   className={'bg-neutral-700 placeholder:text-neutral-400 focus-visible:ring-0 focus-visible:ring-offset-0'}
                 />
@@ -102,7 +164,7 @@ export const UploadForm = (
               <FormControl>
                 <Input
                   {...field}
-                  disabled={disabled}
+                  disabled={isPending}
                   placeholder={'專輯'}
                   className={'bg-neutral-700 placeholder:text-neutral-400 focus-visible:ring-0 focus-visible:ring-offset-0'}
                 />
@@ -114,34 +176,35 @@ export const UploadForm = (
 
         {/* 上傳音樂與照片 */}
         {/* 上傳成功之後會將連結紀錄給sonPath與imageUrl的input */}
-        <UploadFile
-          label={'Select a song file'}
-          type={'file'}
-          setUrl={setSongUrl}
-          error={form.formState.errors.songUrl?.message}
-        />
-        <UploadFile
-          label={'Select a song image'}
-          type={'image'}
-          setUrl={setImageUrl}
-          error={form.formState.errors.imageUrl?.message}
-        />
 
         {/* 隱藏的input，提交songUrl與imageUrl */}
         <FormField
           name={'songUrl'}
           control={form.control}
           render={({ field }) => (
-            <FormItem className={'sr-only'}>
+            <FormItem>
               <FormLabel>
-                Select a song file
+                Select a song song
               </FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                />
-              </FormControl>
+              <UploadFile
+                type={'file'}
+                disabled={isPending}
+                setFile={setSong}
+                file={song}
+                setPreviewUrl={setSongPreviewUrl}
+                previewUrl={songPreviewUrl}
+              />
               <FormMessage />
+              {songProgress !== undefined && songProgress !== 100 && (
+                <div className={'flex justify-end'}>
+                  上傳中... {songProgress}%
+                </div>
+              )}
+              {songProgress === 100 && (
+                <div className={'flex justify-end'}>
+                  <CheckCheck className={'text-green-500'} />
+                </div>
+              )}
             </FormItem>
           )}
         />
@@ -149,21 +212,35 @@ export const UploadForm = (
           name={'imageUrl'}
           control={form.control}
           render={({ field }) => (
-            <FormItem className={'sr-only'}>
+            <FormItem>
               <FormLabel>
                 Select a song image
               </FormLabel>
-              <FormControl>
-                <Input
-                  {...field}
-                />
-              </FormControl>
+              <UploadFile
+                type={'image'}
+                disabled={isPending}
+                setFile={setImage}
+                file={image}
+                setPreviewUrl={setImagePreviewUrl}
+                previewUrl={imagePreviewUrl}
+              />
               <FormMessage />
+              {imageProgress !== undefined && imageProgress !== 100 && (
+                <div className={'flex justify-end'}>
+                  上傳中... {songProgress}%
+                </div>
+              )}
+              {imageProgress === 100 && (
+                <div className={'flex justify-end'}>
+                  <CheckCheck className={'text-green-500'} />
+                </div>
+              )}
             </FormItem>
           )}
         />
 
         <Button
+          disabled={isPending}
           className={'bg-green-400 w-full'}
         >
           Create
