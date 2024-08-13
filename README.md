@@ -16,3 +16,4 @@
 - **資料庫**: PostgreSQL 
 - **ORM**: Drizzle ORM
 - **欄位驗證**: Zod
+- **狀態管理**: Zustand
